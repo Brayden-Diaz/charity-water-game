@@ -9,14 +9,22 @@
 <body>
   <div class="container">
     <h1>Water Quest</h1>
+    <img src="img/cw_logo.png" alt="Charity Water Logo" class="logo" />
     <p class="game-instructions">Collect 20 cans to win the game!</p>
     <div class="stats">
       <p>Cans Collected: <span id="current-cans">0</span></p>
       <p>Time Left: <span id="timer">30</span>s</p>
     </div>
-    <div id="achievements" class="achievement"></div>
     <div class="game-grid"></div>
     <button id="start-game">Start Game</button>
+  </div>
+  <div id="achievement-modal" class="modal" style="display:none;">
+    <div class="modal-content">
+      <img src="img/cw_logo_horizontal.png" alt="Charity Water Logo" class="modal-logo" style="width: 200px; display: block; margin: 0 auto 20px auto;" />
+      <h2 id="modal-score"></h2>
+      <p id="modal-message"></p>
+      <button id="close-modal">Close</button>
+    </div>
   </div>
   <script src="script.js"></script>
 </body>

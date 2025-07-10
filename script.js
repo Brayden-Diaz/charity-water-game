@@ -32,6 +32,24 @@ function createGrid() {
   }
 }
 
+function displayAchievement(message) {
+  // Show the modal and set its content
+  const modal = document.getElementById('achievement-modal');
+  const modalMessage = document.getElementById('modal-message');
+  const modalScore = document.getElementById('modal-score');
+  modalMessage.textContent = message;
+  modalScore.textContent = `Score: ${currentCans}`;
+  modal.style.display = 'flex';
+}
+
+// Close modal handler
+const closeModalBtn = document.getElementById('close-modal');
+if (closeModalBtn) {
+  closeModalBtn.addEventListener('click', () => {
+    document.getElementById('achievement-modal').style.display = 'none';
+  });
+}
+
 // Ensure the grid is created when the page loads
 createGrid();
 
@@ -86,14 +104,13 @@ function endGame() {
   clearInterval(timerInterval); // Stop the timer
 
   // Show win or lose message based on cans collected
-  const achievementDiv = document.getElementById('achievements');
   let message = '';
   if (currentCans >= GOAL_CANS) {
     message = winMessages[Math.floor(Math.random() * winMessages.length)];
   } else {
     message = loseMessages[Math.floor(Math.random() * loseMessages.length)];
     }
-  achievementDiv.textContent = message;
+  displayAchievement(message); // Display the achievement message
 }
 
 // Set up click handler for the start button
