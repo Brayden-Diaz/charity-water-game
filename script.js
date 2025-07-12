@@ -1,10 +1,12 @@
 // Game configuration and state variables
+const collectSound = new Audio('PATH/TO/SOUND/EFFECT.mp3');
+const pollutantSound = new Audio('PATH/TO/POLLUTANT/SOUND.mp3');
 const GOAL_CANS = 20;        // Total items needed to collect
 let currentCans = 0;         // Current number of items collected
 let gameActive = false;      // Tracks if game is currently running
 let spawnInterval;          // Holds the interval for spawning items
 let timerInterval;           // Holds the interval for the timer
-let timeRemaining = 30;      // Time left in seconds
+let timeRemaining      // holds the timer duration
 const winMessages = [ // Array of win messages
   "Great job!",
   "You're a water can master!",
@@ -20,6 +22,36 @@ const loseMessages = [ // Array of lose messages
   "You can do it next time!",
   "Keep practicing!",
 ];
+
+// Difficulty configuration
+const DIFFICULTY_SETTINGS = {
+  easy: {
+    pollutants: 0,
+    spawnInterval: 1000,
+    timer: 30,
+    pollutantPenalty: 0,
+  },
+  medium: {
+    pollutants: 2,
+    spawnInterval: 750, // 25% tighter
+    timer: 30,
+    pollutantPenalty: 1,
+  },
+  hard: {
+    pollutants: 3,
+    spawnInterval: 670, // 33% tighter
+    timer: 25,
+    pollutantPenalty: 1,
+  },
+  veryhard: {
+    pollutants: 3,
+    spawnInterval: 340, // 66% tighter
+    timer: 20,
+    pollutantPenalty: 2,
+  },
+};
+let currentDifficulty = 'easy';
+
 
 // Creates the 3x3 game grid where items will appear
 function createGrid() {
@@ -53,23 +85,37 @@ if (closeModalBtn) {
 // Ensure the grid is created when the page loads
 createGrid();
 
+function getDifficultySettings() {
+  return DIFFICULTY_SETTINGS[currentDifficulty];
+}
+
 // Spawns a new item in a random grid cell
-function spawnWaterCan() {
-  if (!gameActive) return; // Stop if the game is not active
+function spawnItems() {
+  if (!gameActive) return;
   const cells = document.querySelectorAll('.grid-cell');
-
-  // Clear all cells before spawning a new water can
   cells.forEach(cell => (cell.innerHTML = ''));
+  const settings = getDifficultySettings();
+  let availableCells = Array.from(cells);
 
-  // Select a random cell from the grid to place the water can
-  const randomCell = cells[Math.floor(Math.random() * cells.length)];
+  // Place pollutants
+  for (let i = 0; i < settings.pollutants; i++) {
+    if (availableCells.length === 0) break;
+    const idx = Math.floor(Math.random() * availableCells.length);
+    const cell = availableCells[idx];
+    cell.innerHTML = `<div class=\"pollutant\"><img src='PATH/TO/POLLUTANT/IMAGE.png' alt='Pollutant' style='width:100%;height:100%'></div>`;
+    availableCells.splice(idx, 1);
+  }
+  // Place only one water can if there is at least one available cell
+  if (availableCells.length > 0) {
+    const idx = Math.floor(Math.random() * availableCells.length);
+    const cell = availableCells[idx];
+    cell.innerHTML = `
+      <div class=\"water-can-wrapper\">
 
-  // Use a template literal to create the wrapper and water-can element
-  randomCell.innerHTML = `
-    <div class="water-can-wrapper">
-      <div class="water-can"></div>
-    </div>
-  `;
+        <div class=\"water-can\"></div>
+      </div>
+    `;
+  }
 }
 
 // Updates the displayed values for cans collected and time left
@@ -84,9 +130,11 @@ function startGame() {
   gameActive = true;
   createGrid(); // Set up the game grid
   currentCans = 0; // Reset collected cans
-  timeRemaining = 30; // Reset timer
+  const settings = getDifficultySettings();
+  timeRemaining = settings.timer; // Reset timer
   updateStatsDisplay(); // Update display at start
-  spawnInterval = setInterval(spawnWaterCan, 1000); // Spawn water cans every second
+  spawnItems();
+  spawnInterval = setInterval(spawnItems, settings.spawnInterval); // Spawn water cans every second
 
   // Start the timer
   timerInterval = setInterval(() => {
@@ -116,24 +164,33 @@ function endGame() {
 // Set up click handler for the start button
 document.getElementById('start-game').addEventListener('click', startGame);
 
-// Set up click handlers for grid cells to collect water cans
+// Set up click handlers for grid cells to collect water cans or pollutants
 document.querySelector('.game-grid').addEventListener('click', (event) => {
   if (!gameActive) return; // Ignore clicks if the game is not active
   const target = event.target;
-
-  // Check if the clicked element is a water can
+  const settings = getDifficultySettings();
+  let clicked = false;
   if (target.classList.contains('water-can')) {
-    currentCans++; // Increment the count of collected cans
-    updateStatsDisplay(); // Update display when can is collected
-    target.parentElement.remove(); // Remove the water can from the grid
-
-    // Spawn a new can immediately after collecting one
-    spawnWaterCan();
-
-    // Reset the spawn interval to 1 second after a can is clicked
-    clearInterval(spawnInterval);
-    spawnInterval = setInterval(spawnWaterCan, 1000);
+    currentCans++;
+    updateStatsDisplay();
+    collectSound.play();
+    clicked = true;
+  } else if (target.closest('.pollutant')) {
+    currentCans -= settings.pollutantPenalty;
+    if (currentCans < 0) currentCans = 0;
+    updateStatsDisplay();
+    pollutantSound.play();
+    clicked = true;
   }
+  if (clicked) {
+    spawnItems();
+    clearInterval(spawnInterval);
+    spawnInterval = setInterval(spawnItems, settings.spawnInterval);
+  }
+});
+
+document.getElementById('difficulty-select')?.addEventListener('change', (e) => {
+  currentDifficulty = e.target.value;
 });
 
 
