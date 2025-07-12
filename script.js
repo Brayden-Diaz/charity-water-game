@@ -52,6 +52,13 @@ const DIFFICULTY_SETTINGS = {
 };
 let currentDifficulty = 'easy';
 
+// Modal trigger and close references
+const gameModal = document.getElementById('game-modal');
+const openGameBtn = document.getElementById('launch-game');
+const closeGameBtn = document.getElementById('close-game');
+const pageWrapper = document.getElementById('page');
+
+
 
 // Creates the 3x3 game grid where items will appear
 function createGrid() {
@@ -193,6 +200,27 @@ document.querySelector('.game-grid').addEventListener('click', (event) => {
   }
 });
 
+// Open the game modal
+if (openGameBtn) {
+  openGameBtn.addEventListener('click', () => {
+    gameModal.style.display = 'flex';
+    document.body.classList.add('modal-open');
+    pageWrapper.classList.add('blurred');
+    createGrid(); // ensure fresh grid is visible
+  });
+}
+
+// Close the game modal
+if (closeGameBtn) {
+  closeGameBtn.addEventListener('click', () => {
+    gameModal.style.display = 'none';
+    document.body.classList.remove('modal-open');
+    // pageWrapper.classList.remove('blurred');
+    endGame(); // stops the game if it’s running
+  });
+}
+
+// Difficulty selection change handler
 document.getElementById('difficulty-select')?.addEventListener('change', (e) => {
   currentDifficulty = e.target.value;
 });
