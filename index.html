@@ -13,6 +13,15 @@
   <div class="container">
     <h1>Water Quest</h1>
     <p class="game-instructions">Collect 20 cans to win the game!</p>
+    <div style="text-align:center; margin-bottom:20px;">
+      <label for="difficulty-select" style="font-weight:bold; color:#2E9DF7; margin-right:8px;">Select Difficulty:</label>
+      <select id="difficulty-select" style="padding:6px 12px; border-radius:6px; font-size:16px; border-color:#FFC907; color:#2E9DF7; font-weight:bold;">
+        <option value="easy" style="color:#2E9DF7;">Easy</option>
+        <option value="medium" style="color:#2E9DF7;">Medium</option>
+        <option value="hard" style="color:#2E9DF7;">Hard</option>
+        <option value="veryhard" style="color:#2E9DF7;">Very Hard</option>
+      </select>
+    </div>
     <div class="stats">
       <p>Cans Collected: <span id="current-cans">0</span></p>
       <p>Time Left: <span id="timer">30</span>s</p>

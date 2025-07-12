@@ -1,6 +1,6 @@
 // Game configuration and state variables
-const collectSound = new Audio('PATH/TO/SOUND/EFFECT.mp3');
-const pollutantSound = new Audio('PATH/TO/POLLUTANT/SOUND.mp3');
+const collectSound = new Audio('audio/canAudio.wav');
+const pollutantSound = new Audio('audio/pollutantAudio.wav');
 const GOAL_CANS = 20;        // Total items needed to collect
 let currentCans = 0;         // Current number of items collected
 let gameActive = false;      // Tracks if game is currently running
@@ -102,7 +102,11 @@ function spawnItems() {
     if (availableCells.length === 0) break;
     const idx = Math.floor(Math.random() * availableCells.length);
     const cell = availableCells[idx];
-    cell.innerHTML = `<div class=\"pollutant\"><img src='PATH/TO/POLLUTANT/IMAGE.png' alt='Pollutant' style='width:100%;height:100%'></div>`;
+    cell.innerHTML = `
+      <div class=\"pollutant-wrapper\">  
+        <div class=\"pollutant\"></div>
+      </div>
+    `;
     availableCells.splice(idx, 1);
   }
   // Place only one water can if there is at least one available cell
