@@ -168,7 +168,7 @@ function endGame() {
     message = winMessages[Math.floor(Math.random() * winMessages.length)];
   } else {
     message = loseMessages[Math.floor(Math.random() * loseMessages.length)];
-    }
+  }
   displayAchievement(message); // Display the achievement message
 }
 
