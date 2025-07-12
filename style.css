@@ -147,39 +147,99 @@ body {
   background-color: #e6b800;
 }
 
-/* --- GAME MODAL WRAPPER (NEW) --- */
 .game-modal {
   position: fixed;
   top: 0;
   left: 0;
-  z-index: 999;
+  z-index: 1000;
   width: 100vw;
   height: 100vh;
-  background-color: rgba(0, 0, 0, 0.85);
+  background: rgba(0, 0, 0, 0.85);
   display: flex;
   justify-content: center;
   align-items: center;
-  overflow: auto;
-  padding: 40px 20px;
+  padding: 20px;
+  overflow: hidden;
+}
+
+.modal-layout {
+  display: grid;
+  grid-template-columns: 1fr 2fr;
+  grid-template-rows: auto 1fr;
+  gap: 24px;
+  width: 90vw;
+  max-width: 1200px;
+  max-height: 90vh;
+  background: #fff;
+  padding: 30px;
+  border-radius: 12px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.25);
+  align-items: start;
+  justify-items: stretch;
 }
 
 .game-modal .container {
-  width: 100%;
-  max-width: var(--container-max-width);
-  background-color: #fff;
-  padding: 40px;
-  border-radius: 10px;
-  box-shadow: 0 2px 20px rgba(0, 0, 0, 0.25);
-  overflow-y: auto;
+  display: grid;
+  grid-template-columns: 1fr 2fr;
+  gap: 40px;
+  width: 90vw;
+  max-width: 1200px;
+  max-height: 90vh;
+  background: #fff;
+  padding: 30px;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.25);
 }
 
+.modal-title {
+  grid-column: 1 / 3;
+  text-align: center;
+  margin-bottom: 10px;
+}
+
+.left-panel,
+.right-panel {
+  height: 100%;
+}
+
+.left-panel {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  gap: 20px;
+}
+
+.right-panel {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 20px;
+}
+
+
+.difficulty-controls {
+  text-align: left;
+  margin-top: 20px;
+}
+
+.difficulty-controls select {
+  padding: 6px 12px;
+  border-radius: 6px;
+  font-size: 16px;
+  border-color: #FFC907;
+  color: #2E9DF7;
+  font-weight: bold;
+  width: 100%;
+}
 
 body.modal-open {
   overflow: hidden;
 }
 
-/* #page.blurred {
-  filter: blur(6px);
+/* body.modal-open #page.blurred {
+  filter: blur(5px);
   pointer-events: none;
   user-select: none;
 } */
@@ -202,28 +262,6 @@ body.modal-open {
 #close-game:hover {
   background-color: #FFC907;
   color: white;
-}
-
-/* Retain all original gameplay and modal styles below unchanged until further instruction */
-
-/* Aspect-ratio + width based scaling for .container only */
-@media (max-width: 1920px) and (aspect-ratio: 16/9) {
-  .container { --container-max-width: 1200px; --container-scale: 1; }
-}
-@media (max-width: 2560px) and (aspect-ratio: 16/9) {
-  .container { --container-max-width: 1600px; --container-scale: 1.35; }
-}
-@media (max-width: 2560px) and (aspect-ratio: 21/9) {
-  .container { --container-max-width: 1800px; --container-scale: 1.5; }
-}
-@media (max-width: 3440px) and (aspect-ratio: 21/9) {
-  .container { --container-max-width: 2200px; --container-scale: 1.7; }
-}
-@media (max-width: 3840px) and (aspect-ratio: 32/9) {
-  .container { --container-max-width: 2600px; --container-scale: 1.9; }
-}
-@media (max-width: 5120px) and (aspect-ratio: 32/9) {
-  .container { --container-max-width: 3200px; --container-scale: 2.2; }
 }
 
 h1 {
@@ -439,4 +477,27 @@ button {
   .game-grid { max-width: 99vw; gap: 4px; }
   .modal-content { padding: 8px 2px; }
   .footer-links a { font-size: 10px; padding: 4px 10px; }
+}
+@media (max-width: 1024px) {
+  .game-modal .container {
+    grid-template-columns: 1fr;
+    grid-template-rows: auto auto;
+    overflow-y: auto;
+    height: auto;
+    max-height: 90vh;
+  }
+
+  .left-panel,
+  .right-panel {
+    max-width: 100%;
+    width: 100%;
+  }
+}
+
+/* Support for ultrawide screens */
+@media (min-width: 2560px) {
+  .game-modal .container {
+    max-width: 1600px;
+    padding: 40px;
+  }
 }
