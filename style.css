@@ -283,6 +283,11 @@ h1 {
   color: #2E9DF7;
 }
 
+.difficulty-info-modal {
+ color:#2E9DF7;
+ text-align: center;
+}
+
 .stats {
   display: flex;
   justify-content: space-around;
@@ -305,8 +310,7 @@ h1 {
   grid-template-columns: repeat(3, 1fr);
   gap: calc(15px * var(--container-scale, 1));
   margin: 0 auto;
-  max-width: 100%;
-  width: 100%;
+  width: 70%;
 }
 
 .grid-cell {

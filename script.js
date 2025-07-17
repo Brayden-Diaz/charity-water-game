@@ -220,9 +220,25 @@ if (closeGameBtn) {
   });
 }
 
-// Difficulty selection change handler
+const difficultyDescriptions = {
+  easy: "Easy Mode: No pollutants. Collect 20 cans in 30 seconds. Just focus on clicking the water cans!",
+  medium: "Medium Mode: Items spawn 25% faster. 2 pollutants appear. Avoid clicking them or lose 1 can. You still have 30 seconds.",
+  hard: "Hard Mode: Items spawn 33% faster. 3 pollutants and just 25 seconds to meet your goal. Pollutants cost you 1 can each.",
+  veryhard: "Very Hard Mode: Items spawn 67% faster. 3 pollutants, only 20 seconds, and each pollutant costs you 2 cans. Good luck!",
+};
+
+function updateDifficultyInfo() {
+  const infoDiv = document.getElementById('difficulty-info');
+  infoDiv.textContent = difficultyDescriptions[currentDifficulty];
+}
+
+// Initial info on page load
+updateDifficultyInfo();
+
+// Update info when difficulty changes
 document.getElementById('difficulty-select')?.addEventListener('change', (e) => {
   currentDifficulty = e.target.value;
+  updateDifficultyInfo();
 });
 
 
